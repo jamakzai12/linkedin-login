@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+linkedin-api
+python-dotenv
+pydantic
+slowapi 
