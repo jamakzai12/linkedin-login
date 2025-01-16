@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-linkedin-api
+gunicorn
 python-dotenv
 pydantic
 slowapi 
+linkedin-api
