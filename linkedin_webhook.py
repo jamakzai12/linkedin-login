@@ -1,3 +1,5 @@
+# main.py
+
 from fastapi import FastAPI, HTTPException, Request
 from linkedin_api import Linkedin
 from pydantic import BaseModel
@@ -39,14 +41,14 @@ async def check_linkedin_login(credentials: LinkedInCredentials, request: Reques
             proxy_auth = ""
             if credentials.proxy_user and credentials.proxy_pass:
                 proxy_auth = f"{credentials.proxy_user}:{credentials.proxy_pass}@"
-            
+
             proxy_url = f"http://{proxy_auth}{credentials.proxy_host}:{credentials.proxy_port}"
             proxies = {
                 "http": proxy_url,
                 "https": proxy_url
             }
 
-        # Initialize LinkedIn API client with proxy if provided
+        # Initialize LinkedIn API client with proxy (if provided)
         api = Linkedin(
             credentials.email, 
             credentials.password,
@@ -70,4 +72,15 @@ async def check_linkedin_login(credentials: LinkedInCredentials, request: Reques
                 "message": f"Login failed: {str(e)}",
                 "profile_data": None
             }
-        ) 
+        )
+
+# The 'main:app' syntax is valid for Uvicorn/Gunicorn with ASGI workers.
+# This block only runs when calling "python main.py" directly.
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",      # <--- ASGI path: module:file-level-variable
+        host="0.0.0.0",
+        port=8080,
+        reload=True      # set to True only for local dev auto-reload
+    )
